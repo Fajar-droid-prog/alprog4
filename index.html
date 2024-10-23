@@ -1,16 +1,120 @@
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="https://png.pngtree.com/png-clipart/20211017/original/pngtree-logo-jogja-png-image_6852217.png">
-    <title>Daerah Istimewa Yogyakarta</title> 
-    <link rel="stylesheet" type="text/css" href="C:\Users\Lenovo\Documents\style acara4.css">
+    <title>Daerah Istimewa Yogyakarta</title>
+    <link rel="stylesheet" type="text/css" href="style acara4.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        /* Style untuk mengatur tampilan konten */
+        #mapContent, #tableContent {
+            display: none;
+        }
+        .active {
+            display: block !important;
+        }
+        body {
+    font-family: 'Times New Roman', Times, serif, sans-serif;
+    line-height: 1.6;
+    margin: 0px;
+    padding: 0px;
+    background-image: url('https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/p2/11/2023/12/28/1616399205-dscf0607-3342452042.jpg');
+    background-size: cover;
+    background-position: center;    
+    background-attachment: fixed;
+    background-repeat: no-repeat;        
+}
+.container {
+    text-align: center;
+    opacity: 100%;
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    margin-top: 20px;
+}
+h2 {
+    text-align: center;
+    color: #926d6d;
+}
+header {
+    background: rgba(1, 6, 21, 0.253);
+    color: #ffffff;
+    padding-top: 30px;
+    min-height: 70px;
+    border-bottom: hsl(13, 85%, 11%) 3px solid;
+}
+header h1 {
+    margin: 0;
+    text-align: center;
+    padding-bottom: 20px;
+}
+.highlight {
+    font-style: italic;
+    color: #250c05;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+th, td {
+    padding: 15px;
+    text-align: left;
+}
+th {
+    background-color: #3d1e0e;
+    color: rgb(255, 255, 255);
+}
+tr {
+    border: 1px solid #2e0707;
+}
+.btn {
+            display: inline-block;
+            background: #240a03;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            margin-top: 20px;
+            text-decoration: none;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+}
+.btn:hover {
+    background: #850707;
+    margin-top: 20px;
+}
+#map {
+    height: 400px;
+    width: 100%;
+}
+.btn + .btn {
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
-            <h1>Daerah Istimewa<span class="highlight"> Yogyakarta</span></h1>
+        <h1>Daerah Istimewa<span class="highlight">Yogyakarta</span></h1>
     </header>
-    <div class="container">
+
+    <!-- Konten Peta -->
+    <div id="mapContent" class="container active">
+        <div id="map"></div>
+        <button onclick="showContent('tableContent')" class="btn">Lihat proyeksi penduduk</button>
+    </div>
+
+    <!-- Konten Tabel -->
+    <div id="tableContent" class="container">
         <h2>Proyeksi Jumlah Penduduk D.I. Yogyakarta</h2>
         <table>
             <thead>
@@ -54,7 +158,34 @@
                 </tr>
             </tbody>
         </table>
-        <a href="https://yogyakarta.bps.go.id/id/statistics-table/2/MTMzIzI=/jumlah-penduduk-menurut-kabupaten-kota-di-d-i-yogyakarta-.html" class="btn">Lihat Data Lengkap</a>
+        <a href="https://yogyakarta.bps.go.id/id/statistics-table/2/MTMzIzI=/jumlah-penduduk-menurut-kabupaten-kota-di-d-i-yogyakarta-.html" class="btn">Lihat Data Lengkap</a><br>
+        <button onclick="showContent('mapContent')" class="btn">Kembali ke Peta</button>   
     </div>
+
+    <script>
+        // Script untuk peta
+        var map = L.map('map').setView([-7.8024, 110.3814], 13); 
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        L.marker([-7.8024, 110.3814]).addTo(map)
+            .bindPopup('Yogyakarta, Daerah Istimewa Yogyakarta')
+            .openPopup();
+
+        // Function untuk mengganti konten
+        function showContent(contentId) {
+            // Sembunyikan semua konten
+            document.getElementById('mapContent').classList.remove('active');
+            document.getElementById('tableContent').classList.remove('active');
+            
+            // Tampilkan konten yang dipilih
+            document.getElementById(contentId).classList.add('active');
+            
+            // Perbarui peta jika kembali ke tampilan peta
+            if(contentId === 'mapContent') {
+                map.invalidateSize();
+            }
+        }
+    </script>
 </body>
 </html>
